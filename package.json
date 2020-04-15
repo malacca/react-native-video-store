@@ -1,0 +1,28 @@
+{
+  "name": "react-native-video-store",
+  "title": "React Native Video Store",
+  "version": "1.0.0",
+  "description": "Video cache for react-native",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/malacca/react-native-video-store.git",
+    "baseUrl": "https://github.com/malacca/react-native-video-store"
+  },
+  "keywords": [
+    "react-native"
+  ],
+  "author": "Malacca <malacca42@gmail.com>",
+  "homepage": "https://github.com/malacca/react-native-video-store",
+  "license": "MIT",
+  "licenseFilename": "LICENSE",
+  "readmeFilename": "README.md",
+  "peerDependencies": {
+    "react": "^16.8.1",
+    "react-native": ">=0.60.0-rc.0 <1.0.x"
+  },
+  "devDependencies": {
+    "react": "^16.9.0",
+    "react-native": "^0.61.5"
+  }
+}
