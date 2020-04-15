@@ -63,21 +63,21 @@ psr.result().then(r => {
 
 
 // 取消所有预加载
-VideoStore.clearPreload();
+vStore.clearPreload();
 
 
 // 获取当前缓存文件占用空间大小 (单位: KB)
-VideoStore.getCacheSize().then(size => {})
+vStore.getCacheSize().then(size => {})
 
 
 // 移除指定 url 的缓存文件 (必须是加载时 videoId=null)
-VideoStore.removeCache(url)
+vStore.removeCache(url)
 
 
 // 移除 videoId 的缓存文件
-VideoStore.removeCacheById(videoId)
+vStore.removeCacheById(videoId)
 
 
 // 清空缓存
-VideoStore.clearCache()
+vStore.clearCache()
 ```
