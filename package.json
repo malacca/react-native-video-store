@@ -1,7 +1,7 @@
 {
   "name": "react-native-video-store",
   "title": "React Native Video Store",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "Video cache for react-native",
   "main": "index.js",
   "repository": {
