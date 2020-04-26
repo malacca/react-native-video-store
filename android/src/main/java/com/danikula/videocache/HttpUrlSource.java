@@ -157,23 +157,25 @@ public class HttpUrlSource implements Source {
         do {
             Logger.debug("Open connection " + (offset > 0 ? " with offset " + offset : "") + " to " + url);
             connection = (HttpURLConnection) new URL(url).openConnection();
-            // add:  支持 301 URL 使用相同的 custom header
-            Map<String, String> cHeaders;
-            if (redirectHeaders == null) {
-                CustomHeaders customHeaders = headerInjector.addHeaders(url);
-                cHeaders = customHeaders.headers;
-                if (customHeaders.applyRedirect) {
-                    redirectHeaders = cHeaders;
+
+            // modify: 自定义 request header 获取
+            CustomHeaders customHeaders = headerInjector.addHeaders(url);
+            Map<String, String> cHeaders = customHeaders.headers;
+            if (cHeaders == null) {
+                if (redirectHeaders != null) {
+                    cHeaders = redirectHeaders;
                 }
-            } else {
-                cHeaders = redirectHeaders;
+            } else if (customHeaders.applyRedirect) {
+                // 支持 301 header 复用, 保存一下
+                redirectHeaders = cHeaders;
             }
             if (cHeaders != null) {
                 for (Map.Entry<String, String> header : cHeaders.entrySet()) {
                     connection.setRequestProperty(header.getKey(), header.getValue());
                 }
             }
-            // End added
+            // End modify
+
             if (offset > 0) {
                 connection.setRequestProperty("Range", "bytes=" + offset + "-");
             }

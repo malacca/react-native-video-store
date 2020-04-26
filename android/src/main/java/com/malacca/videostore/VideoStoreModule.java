@@ -20,14 +20,15 @@ import com.facebook.react.bridge.ReadableMapKeySetIterator;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 
 import com.danikula.videocache.ProxyCacheUtils;
-import com.danikula.videocache.file.FileNameGenerator;
+import com.danikula.videocache.HttpProxyCacheServer;
 import com.danikula.videocache.headers.CustomHeaders;
 import com.danikula.videocache.headers.HeaderInjector;
-import com.danikula.videocache.HttpProxyCacheServer;
+import com.danikula.videocache.file.FileNameGenerator;
 
 public class VideoStoreModule extends ReactContextBaseJavaModule {
     private HttpProxyCacheServer.Builder cacheBuilder;
     private HttpProxyCacheServer httpProxyCacheServer;
+    private final String httpAgent;
     private Map<String, CustomHeaders> httpRequestHeaders;
     private CustomHeaders defaultCustomHeader;
     private boolean disableSystemUserAgent;
@@ -76,8 +77,9 @@ public class VideoStoreModule extends ReactContextBaseJavaModule {
         @Override
         public CustomHeaders addHeaders(String url) {
             CustomHeaders customHeaders = getCustomHeaders(url);
-            if (!disableSystemUserAgent) {
-                customHeaders.headers.put("User-Agent", System.getProperty("http.agent"));
+            if (!disableSystemUserAgent && httpAgent != null
+                    && !customHeaders.headers.containsKey("User-Agent")) {
+                customHeaders.headers.put("User-Agent", httpAgent);
             }
             return customHeaders;
         }
@@ -104,6 +106,7 @@ public class VideoStoreModule extends ReactContextBaseJavaModule {
                 new HashMap<String, String>(),
                 true
         );
+        httpAgent = System.getProperty("http.agent");
     }
 
     @NonNull
@@ -156,7 +159,10 @@ public class VideoStoreModule extends ReactContextBaseJavaModule {
         ReadableMapKeySetIterator headerIterator = headers.keySetIterator();
         while (headerIterator.hasNextKey()) {
             String key = headerIterator.nextKey();
-            headerMap.put(key, headers.getString(key));
+            String value = headers.getString(key);
+            if (value != null) {
+                headerMap.put(key, value);
+            }
         }
         return makeCustomHeaders(headerMap, applyRedirect);
     }
